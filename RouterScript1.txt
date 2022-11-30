@@ -4,3 +4,15 @@ conf t
 
 hostname [hostname]
 
+enable secret [secret]
+
+service password-encryption
+
+
+banner motd "MOTD"
+
+line con 0
+
+password Cisco
+
+login

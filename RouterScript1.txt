@@ -16,3 +16,6 @@ line con 0
 password Cisco
 
 login
+
+line vty 0 15
+password Cisco

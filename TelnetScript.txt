@@ -1,0 +1,23 @@
+En 
+
+Conf t 
+
+Hostname Sw0 
+
+Inte vlan 1 
+
+Ip address 192.168.0.3 255.255.255.0 
+
+No shut 
+
+Enable password ciscoen 
+
+Line vty 0 15  
+
+Password ciscovty  
+
+Login 
+
+Transport input telnet 						
+
+Ip default-gateway 192.168.0.2 

@@ -1,0 +1,66 @@
+en
+
+conf t
+
+hostname R1
+
+ip domain-name ccna-lab.com
+
+
+no ip domain-lookup
+
+service password-encryption
+
+security password min-length 12
+
+username SSHadmin secret 55Hadmin2020
+
+cyrpto key generate rsa
+
+1024
+
+enable password $cisco!PRIV*
+
+
+
+line con 0
+
+password $cisco!!CON*
+
+exec-timeout 4
+
+login
+
+line vty 0 5
+no transport input telnet
+transport input SSH
+login local
+
+banner motd #Unauthorized access is prohibited.#
+
+ipv6 unicast-routing
+
+inte g0/0/0
+ip address 192.168.0.1 255.255.255.0
+description to LAN1 
+no shut
+
+inte g0/0/1
+ip address 192.168.1.1 255.255.255.0
+description to LAN2
+no shut
+
+inte Loopback0
+ip address 10.0.0.1 255.255.255.0
+description to Loopback0
+no shut
+
+login block-for 120 attempts 3 within 60
+
+clock set 10:00:00 jan 1 2023
+
+do wr
+
+
+
+

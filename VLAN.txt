@@ -1,0 +1,67 @@
+Script for VLAN 
+
+ 
+
+En 
+
+Conf t 
+
+ 
+
+Vlan 2 
+
+Name faculty 
+
+ 
+
+Vlan 3 
+
+Name student 
+
+ 
+
+Vlan 55 
+
+Name management 
+
+ 
+
+Do sh vlan br 
+
+Exit 
+
+ 
+
+Interface fa 0/1 
+
+Switchport mode access 
+
+Switchport access vlan 2 
+
+ 
+
+Inte fa 0/2 
+
+Switchport mode access 
+
+Switchport access vlan 2 
+
+ 
+
+Inte range fa0/3 - 4 
+
+Switchport mode access 
+
+Switchport access vlan 3 
+
+ 
+
+Inte fa 0/5 
+
+Switchport mode access  
+
+Swithcport access vlan 55 
+
+ 
+
+Do sh vlan br 

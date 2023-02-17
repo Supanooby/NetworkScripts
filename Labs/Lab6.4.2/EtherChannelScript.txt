@@ -1,0 +1,168 @@
+SW1
+----------------
+en
+conf t
+
+hostname SW1
+
+no ip domain-lookup
+
+enable secret class
+
+line con 0
+password cisco
+login
+
+line vty 0 15
+password cisco
+login
+
+exit
+
+service password-encryption
+
+banner motd #This is SW1. Unauthorized access is prohibited.#
+
+clock set jan 1 2023 1:00:00
+
+
+
+Part 2
+
+SW1
+----------
+conf t
+
+vlan 10
+name Management
+
+inte vlan 10
+ip address 192.168.10.11 255.255.255.0
+exit
+
+
+vlan 20
+name Clients
+inte G1/0/3
+switchport mode access 
+switchport access vlan 20
+switchport nonegotiate
+no shut
+
+vlan 999
+name Parking_Lot
+inte range (all unused ports)
+switchport mode access
+switchport access vlan 999
+switchport nonegotiate
+shut
+
+
+
+vlan 1000
+name Native
+
+
+part 3
+--------------
+
+inte range G 1/0/1 - 2
+switchport mode trunk
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10, 20, 1000
+
+
+//part 4
+channel-group 1 mode active
+
+do show inte trunk
+
+do show etherchannel summary
+
+
+
+
+
+
+
+SW2
+-------------------
+en
+conf t
+
+hostname SW2
+
+no ip-domain lookup
+
+enable secret class
+
+line con 0
+password class
+login
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption
+
+banner motd #This is SW2. Unauthorized access is not allowed#
+
+exit
+
+clock set jan 1 2023 1:00:00 
+
+
+// part 3
+
+vlan 10
+name Management
+
+inte vlan 10 
+ip address 192.168.10.12 255.255.255.0
+no shut
+
+vlan 20
+name Clients
+inte 
+switchport mode access
+switchport access vlan 20
+switchport nonegotiate
+no shut
+
+vlan 999
+name Parking_Lot
+inte range //(unused ports)//
+switchport mode access
+switchport access vlan 999
+switchport nonegotiate
+shut
+
+vlan 1000
+name Native
+
+
+//part 3
+inte range G 0/1 - 2
+switchport mode trunk
+switchport trunk native vlan 1000
+switchport trunk allowed 10,20,1000
+
+//part 4
+channel-group 1 mode active
+
+do show inte trunk
+
+do show etherchannel summary
+
+
+
+
+
+
+
+
+
+
+
+

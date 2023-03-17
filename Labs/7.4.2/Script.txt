@@ -1,0 +1,85 @@
+INFO
+Subnet 192.168.1.0 255.255.255.0
+
+Subnet A: 
+(client VLAN 100 @ S1 f0/6) 58 Hosts
+192.168.1.0 255.255.255.192 (64 incr)
+First: 192.168.1.1 
+Last: 192.168.1.62
+
+Next Network: 192.168.1.64 
+
+
+Subnet B: 
+(Management VLAN 200 @ S1 VLAN 200) 28 hosts
+192.168.1.64 255.255.255.224 (32 incr)
+First: 192.168.1.65
+Last: 192.168.1.94
+
+Next Network: 192.168.1.96 
+
+
+
+
+
+
+
+Subnet C: 
+(Client Network R2) 12 hosts
+192.168.1.96 255.255.255.240 (16 incr)
+First: 192.168.1.97
+Last: 192.168.1.110
+
+Next Network: 192.168.1.112
+
+---------------------------------------------------------------------------------------------
+Router1
+
+#Step 3
+en
+conf t 
+hostname R1
+
+#step 4
+inte g0/1
+no shut
+
+inte g0/1.100 
+encapsulation dot1q 100 
+ip address 192.168.1.1 255.255.255.192
+description Client Network
+no shut
+
+inte g0/1.200
+encapsulation dot1q 200
+ip address 192.168.1.65 255.255.255.224
+description Management Network
+no shut
+
+inte g0/1.1000
+encapsulation dot1q 1000 native 
+description Native VLANg
+
+
+#Step 5
+inte g0/0
+ip add 10.0.0.1 255.255.255.252
+exit
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
+
+Router 2
+-------------------------------------------------
+en
+conf t
+inte g0/1
+ip address 192.168.1.97 255.255.255.240
+no shut
+
+inte g0/0
+ip address 10.0.0.2
+
+#Step 5
+inte g0/0
+ip add 10.0.0.2 255.255.255.252
+exit
+ip route 0.0.0.0 0.0.0.0 10.0.0.1

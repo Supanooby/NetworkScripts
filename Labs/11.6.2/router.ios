@@ -1,0 +1,217 @@
+! R1
+
+! ---------part1---------------
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+ip dhcp excluded-address 192.168.10.1 192.168.10.9
+ip dhcp excluded-address 192.168.10.201 192.168.10.202
+!
+ip dhcp pool Students
+network 192.168.10.0 255.255.255.0
+default-router 192.168.10.1
+domain-name CCNA2.Lab-11.6.1
+!
+interface Loopback0
+ip address 10.10.1.1 255.255.255.0
+!
+interface GigabitEthernet0/1
+description Link to S1 Port 2
+ip dhcp relay information trusted
+ip address 192.168.10.1 255.255.255.0
+no shutdown
+!
+line con 0
+logging synchronous
+exec-timeout 0 0
+
+
+
+
+
+
+
+
+
+! --------------------S1---------------------------
+
+! part1
+enable
+configure terminal
+
+hostname S1
+
+no ip domain-lookup
+
+
+interface fa0/1
+description link to R1
+
+interface fa0/2
+description trunk link to S2 fa0/1
+
+interface fa0/3
+description access port to PCA
+
+exit
+
+ip default-gateway 192.168.10.1
+
+! part2
+vlan 10
+name Management
+
+inte vlan 10
+ip address 192.168.10.201 255.255.255.0
+description S1 Virtual Interface
+
+vlan 333
+name Native
+
+vlan 999
+name ParkingLot
+
+! part 3
+interface fa0/1
+switchport mode trunk
+switchport trunk native vlan 333
+switchport nonegotiate 
+! Secuirty Measure, Turn off DTP negotiation
+do show interfaces f0/1 switchport | include Negotiation
+
+interface f0/2
+switchport mode access
+switchport access vlan 10
+
+interface f0/3
+switchport mode access
+switchport access vlan 10
+
+! security feature, moved and disable all unused ports to a vlan 
+interface range fa0/4 - 24
+switchport mode access
+switchport access vlan 999
+shutdown 
+
+! Secuirty Features 
+show port-security interface f0/3
+! Enable Port Security 
+switchport port-seucirty
+! Allow a maximum of 3 mac addresses 
+switchport port-seucirty maximum 3
+! Violation type of restrict
+switch port-security violation restrict
+! Aging Time of 60 minutes
+Switchport port-security aging time 60
+! Aging type of inactivity
+Switchport port-security aging type inactivity
+exit 
+
+
+! Configure portfast
+interface range fa0/2 - 3
+spanning-tree portfast 
+! Enable BPDU gaurd
+spanning-tree bpdugaurd enable 
+
+! Verify portfast and BPDU gaurd enabled 
+show spanning-tree interface f0/2 detail
+! --------------S2-------------
+
+! part1
+
+enable
+configure terminal 
+hostname S1
+
+no ip domain-lookup
+
+interface fa0/1
+description trunk link to S2 fa0/1
+
+interface fa0/2
+description access port to PCB
+
+ip default-gateway 192.168.10.1
+
+! part2
+
+vlan 10
+name Management
+
+inte vlan 10
+ip address 192.168.10.202 255.255.255.0
+description S2 Virtual Interface
+
+vlan 333
+name Native
+
+vlan 999
+name ParkingLot
+
+! part 3
+interface fa0/1
+switchport mode trunk
+switchport trunk native vlan 333
+switchport nonegotiate 
+! Secuirty Measure, Turn off DTP negotiation
+do show interfaces f0/1 switchport | include Negotiation
+
+interface f0/2
+switchport mode access
+switchport access vlan 10
+
+! Security feature, moved and disable all unused ports to a vlan 
+interface range fa0/3 - 24
+switchport mode access
+switchport access vlan 999
+shutdown 
+
+do show interfaces status
+
+! Security Featuers
+show port-security interface f0/2
+! Enable Port Security 
+switchport port-seucirty
+! Allow a maximum of 3 mac addresses 
+switchport port-seucirty maximum 2
+! Violation type of protect
+switch port-security violation protect
+! Aging Time of 60 minutes
+Switchport port-security aging time 60
+! Learn MAC address automatically
+Switchport port-security mac-address sticky
+
+! verify port security
+show port-security interface fa0/2
+exit
+
+! DHCP Snooping
+ip dhcp snooping
+ip dhcp snooping vlan 10
+
+! trunk port on s2 as trusted
+interface fa0/1
+ip dhcp snooping trust
+
+! Limit untrusted port fa0/2 on switch 2
+interface fa0/2
+ip dhcp snooping limit rate 5
+
+! Verify ip dhcp snooping
+show ip dhcp snooping
+
+! verrify DHCP snooping binding
+show ip dhcp snooping binding
+
+
+! Configure portfast on all access port
+interface fa0/2
+spanning-tree portfast 
+! Enable BPDUguard
+spanning-tree bpdugaurd enable 
+
+! Verify portfast and BPDU gaurd enabled 
+show spanning-tree interface f0/2 detail
+

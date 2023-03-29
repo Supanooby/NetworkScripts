@@ -113,7 +113,7 @@ exit
 interface range fa0/2 - 3
 spanning-tree portfast 
 ! Enable BPDU gaurd
-spanning-tree bpdugaurd enable 
+spanning-tree bpduguard enable 
 
 ! Verify portfast and BPDU gaurd enabled 
 show spanning-tree interface f0/2 detail
@@ -210,7 +210,7 @@ show ip dhcp snooping binding
 interface fa0/2
 spanning-tree portfast 
 ! Enable BPDUguard
-spanning-tree bpdugaurd enable 
+spanning-tree bpduguard enable 
 
 ! Verify portfast and BPDU gaurd enabled 
 show spanning-tree interface f0/2 detail

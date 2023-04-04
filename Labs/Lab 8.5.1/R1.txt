@@ -1,0 +1,48 @@
+en
+conf t
+hostname R1
+
+ipv6 unicast-routing
+
+inte g0/1
+ipv6 address fe80::1 link-local
+ipv6 address 2001:db8:acad:1::1/64
+no shut
+
+inte g0/0
+ipv6 address fe80::1 link-local
+ipv6 address 2001:db8:acad:2::1 /64
+no shut
+exit
+
+ipv6 route ::/0 2001:db8:acad:2::2
+
+
+ipv6 dhcp pool R1-STATELESS
+dns-server 2001:db8:acad::254
+domain-name STATELESS.com
+
+inte g0/1
+ipv6 nd other-config-flag
+ipv6 dhcp server R1-STATELESS
+
+ipv6 dhcp pool R2-STATEFUL
+address prefix 2001:db8:acad:3:aaa::/80
+dns-server 2001:db8:acad::254
+domain-name STATEFUL.com
+
+inte g0/0
+ipv6 dhcp server R2-STATEFUL
+
+
+
+
+
+
+
+
+
+
+
+
+

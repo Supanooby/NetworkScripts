@@ -1,0 +1,90 @@
+! -------------- R1 --------------------
+! Step 2
+enable
+configure terminal 
+
+hostname R1
+enable secret class
+line console 0
+password cisco
+login
+exit
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #This is R1. Unauthorized access is prohibited.#
+
+! Step 3
+
+
+! ---------------- R2 ---------------------
+! Step 2
+enable
+configure terminal 
+
+
+hostname R2
+enable secret class
+line console 0
+no ip domain-lookup
+password cisco
+login
+exit
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #This is R2. Unauthorized access is prohibited.#
+
+
+! ----------------------- S1 --------------------------
+! Step 3
+enable
+configure terminal
+
+hostname S1
+
+enable secret class
+line console 0 
+no ip domain-lookup
+password cisco
+exit
+line vty 0 15 
+password cisco
+exit
+service password-encryption
+banner motd #This is S1. Unauthorized use prohibited.#
+
+interface range fa 0/3 - 28
+shut
+
+
+
+
+
+
+
+
+! ----------------------- S2 ---------------------------
+! Step 3
+enable
+configure terminal
+
+hostname S2
+
+enable secret class
+line console 0 
+no ip domain-lookup
+password cisco
+exit
+line vty 0 15 
+password cisco
+exit
+service password-encryption
+banner motd #This is S2. Unauthorized use prohibited.#
+
+interface range fa 0/3 - 28
+shut

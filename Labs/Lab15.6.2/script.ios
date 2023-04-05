@@ -1,3 +1,16 @@
+! Interfaces
+! R1
+interface g0/0/0
+interface g0/0/1
+
+! R2
+interface g0/0/0
+interface g0/0/1
+
+
+
+
+
 ! -------------- R1 --------------------
 ! Step 2
 enable
@@ -5,18 +18,54 @@ configure terminal
 
 hostname R1
 enable secret class
+no ip domain-lookup
+
 line console 0
 password cisco
 login
 exit
+
 line vty 0 15
 password cisco
 login
+
 exit
 service password-encryption
 banner motd #This is R1. Unauthorized access is prohibited.#
 
+! ///// Part 2 ////////
+! Step 1 
+
+
 ! Step 3
+ipv6 unicast-routing
+
+interface g0/0/0
+ip address 172.16.1.1 255.255.255.0
+ipv6 address 2001:db8:acad:2::1/64
+ipv6 address fe80::1 link-local 
+
+interface g0/0/1
+ip address 192.168.1.1 255.255.255.0
+ipv6 address 2001:db8:acad:1::1/64
+ipv6 address fe80::1 link-local
+
+interface loopback1
+ip address 10.1.0.1 255.255.255.0
+ipv6 address 2001:db8:acad:10::1/64
+ipv6 address fe80::1 link-local
+
+interface loopback2
+ip address 209.165.200.225 255.255.255.224
+ipv6 address 2001:db8:acad:209::1/64
+ipv6 address fe80::1 link-local
+
+! ///// Part3 //////
+ip route 10.2.0.0 255.255.255.0 192.168.1.2
+
+ip route 0.0.0.0 0.0.0.0 172.16.1.2
+
+ip route 0.0.0.0 0.0.0.0 192.168.1.2 80
 
 
 ! ---------------- R2 ---------------------
@@ -27,17 +76,60 @@ configure terminal
 
 hostname R2
 enable secret class
-line console 0
 no ip domain-lookup
+
+line console 0
 password cisco
 login
 exit
+
 line vty 0 15
 password cisco
 login
+
 exit
 service password-encryption
 banner motd #This is R2. Unauthorized access is prohibited.#
+
+! ////// Part 2 //////
+
+
+! Step 3
+ipv6 unicast-routing
+
+interface g0/0/0
+ip address 172.16.1.2 255.255.255.0
+ipv6 address 2001:db8:acad:2::2/64
+ipv6 address fe80::2 link-local
+
+interface g0/0/1
+ip address 192.168.1.2 255.255.255.0
+ipv6 address 2001:db8:acad:1::2/64
+ipv6 address fe80::2 link-local
+
+interface loopback1
+ip address 10.2.0.1 255.255.255.0
+ipv6 address 2001:db8:acad:11::2/64
+ipv6 address fe80::2 link-local
+
+interface loopback2
+ip address 209.165.200.193 255.255.255.224
+ipv6 address 2001:db8:acad:210::1/64
+ipv6 address fe80::2 link-local
+
+! ///// Part3 //////
+ip route 0.0.0.0 0.0.0.0 172.16.1.1
+
+
+! //////// Part 4 ?//////////////
+ipv6 route  2001:db8:acad:10::0/64 2001:db8:acad:1::1
+ 
+ipv6 route ::/0 2001:db8:acad:2::1
+
+ipv6 route ::/0 2001:db8:acad:2::1 
+
+
+
 
 
 ! ----------------------- S1 --------------------------
@@ -48,13 +140,16 @@ configure terminal
 hostname S1
 
 enable secret class
-line console 0 
 no ip domain-lookup
+
+line console 0 
 password cisco
 exit
+
 line vty 0 15 
 password cisco
 exit
+
 service password-encryption
 banner motd #This is S1. Unauthorized use prohibited.#
 
@@ -76,13 +171,16 @@ configure terminal
 hostname S2
 
 enable secret class
-line console 0 
 no ip domain-lookup
+
+line console 0 
 password cisco
 exit
+
 line vty 0 15 
 password cisco
 exit
+
 service password-encryption
 banner motd #This is S2. Unauthorized use prohibited.#
 

@@ -1,0 +1,68 @@
+PAgP
+----------------------------------
+
+En 
+
+Conf t 
+
+Hostname SW1 	 
+
+ 
+
+Vlan 10  
+
+Name Native 
+
+Exit 
+
+ 
+
+Inte range fa 0/1 - 3  
+
+Switchport mode trunk  
+
+Switchport trunk native vlan 10 
+
+ 
+
+Channel-group 1 mode desirable
+
+
+LACP
+---------------------------------------------------------
+
+
+En 
+
+Conf t 
+
+Hostname SW1 	 
+
+ 
+
+Vlan 10  
+
+Name Native 
+
+Exit 
+
+ 
+
+Inte range fa 0/1 - 3  
+
+Switchport mode trunk  
+
+Switchport trunk native vlan 10 
+
+ 
+
+Channel-group 1 mode active	
+
+
+Show commands
+----------------------------------
+
+
+See interface port-channel
+
+show etherchannel summary		

@@ -1,0 +1,16 @@
+Next Hop Routes:
+
+R1(config)# ipv6 unicast-routing
+R1(config)# ipv6 route 2001:db8:acad:1::/64 2001:db8:acad:2::2
+R1(config)# ipv6 route 2001:db8:cafe:1::/64 2001:db8:acad:2::2
+R1(config)# ipv6 route 2001:db8:cafe:2::/64 2001:db8:acad:2::2
+
+
+R1(config)# ipv6 route 2001:db8:acad:1::/64 s0/1/0
+R1(config)# ipv6 route 2001:db8:cafe:1::/64 s0/1/0
+R1(config)# ipv6 route 2001:db8:cafe:2::/64 s0/1/0
+
+Fully Specified STatic Route:
+R1(config)# ipv6 route 2001:db8:acad:1::/64 fe80::2
+%Interface has to be specified for a link-local nexthop
+R1(config)# ipv6 route 2001:db8:acad:1::/64 s0/1/0 fe80::2

@@ -1,0 +1,18 @@
+Next Hop Routes
+
+R1(config)# ip route 172.16.1.0 255.255.255.0 172.16.2.2
+R1(config)# ip route 192.168.1.0 255.255.255.0 172.16.2.2
+R1(config)# ip route 192.168.2.0 255.255.255.0 172.16.2.2
+
+
+Directly Connected Routes:
+
+R1(config)# ip route 172.16.1.0 255.255.255.0 s0/1/0
+R1(config)# ip route 192.168.1.0 255.255.255.0 s0/1/0
+R1(config)# ip route 192.168.2.0 255.255.255.0 s0/1/0
+
+Fully Specified Static Route:
+
+R1(config)# ip route 172.16.1.0 255.255.255.0 GigabitEthernet 0/0/1 172.16.2.2
+R1(config)# ip route 192.168.1.0 255.255.255.0 GigabitEthernet 0/0/1 172.16.2.2
+R1(config)# ip route 192.168.2.0 255.255.255.0 GigabitEthernet 0/0/1 172.16.2.2

@@ -1,0 +1,28 @@
+Router1 
+
+
+
+
+Inte g0/0 
+192.168.0.1 255.255.255.0
+Inte g0/0 - PC B eth
+
+PC B Eth
+192.168.0.10 255.255.255.0
+PC B Eth - R1 inte g0/0
+
+
+Router Inte g0/1
+192.168.1.1 255.255.255.0
+Router Inte g0/1 - Switch g1/0/1
+
+
+Inte g0/1 - Switch g1/0/1
+
+
+Switch g1/0/2 - PC A eth
+
+
+PC A eth 
+192.168.1.10 255.255.255.0
+

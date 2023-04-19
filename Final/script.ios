@@ -1,0 +1,81 @@
+! R1 -------------------------------------
+
+! Task 1
+en
+configure terminal 
+hostname R1
+
+
+no ip domain-lookup 
+enable secret class
+line con 0
+password cisco
+login 
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption 
+banner motd #This is R1. Unauthorized access is not allowed#
+exit
+
+clock set 10:00:00
+
+configure terminal
+ip domain-name cisco.com
+crypto key generate rsa
+1024
+
+ip ssh version 2
+username  Admin password Cisco12345
+
+! Task 2
+interface g0/1
+ip address 10.0.3.2 255.255.255.
+
+
+
+
+
+
+
+
+
+
+! R2 ---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+! S1 -----------------------------------------
+
+
+
+
+
+
+
+! S2 --------------------------------------
+
+
+
+
+
+
+
+
+
+! S3
+

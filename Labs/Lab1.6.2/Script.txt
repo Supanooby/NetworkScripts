@@ -13,7 +13,7 @@ service password-encryption
 
 security password min-length 12
 
-username SSHadmin secret 55Hadmin2020
+username SSHadmin secret 55Hadm!n2020
 
 cyrpto key generate rsa
 
@@ -32,7 +32,7 @@ exec-timeout 4
 login
 
 line vty 0 5
-no transport input telnet
+no transport input
 transport input SSH
 login local
 

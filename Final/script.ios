@@ -1,0 +1,342 @@
+! R1 -------------------------------------
+
+! Task 1
+en
+configure terminal 
+hostname R1
+
+
+no ip domain-lookup 
+enable secret class
+line con 0
+password cisco
+login 
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption 
+banner motd #This is R1. Unauthorized access is not allowed#
+exit
+
+clock set 10:00:00
+
+configure terminal
+ip domain-name cisco.com
+crypto key generate rsa
+1024
+
+ip ssh version 2
+username  Admin password Cisco12345
+
+! Task 2
+interface g0/0.15
+encapsulation dot1q 15
+ip address 10.0.0.100 255.255.255.0
+ipv6 address 2001:1:1:1::100/64
+ipv6 address FE80::1 link-local
+
+! Task 4
+interface g0/0.30
+encapsulation dot1q 30
+ip address 10.0.1.100 255.255.255.0
+ipv6 address 2001:2:2:2::100/64
+ipv6 address FE80::1 link-local 
+
+interface g0/0.45
+encapsulation dot1q 45
+ip address 10.0.2.100 255.255.255.0
+
+interface g0/1
+ip address 10.0.3.1 255.255.255.252
+ipv6 address 2001:3:3:3::1/64 
+no shutdown
+
+interface g0/0
+no shutdown
+
+! Task 6
+! Create DHCP Pools 
+! Make sure to create a route to the HOST pc 
+! Sales
+Ip dhcp excluded-add 10.0.0.100 10.0.0.103
+Ip dhcp pool SalesPool 
+Network 10.0.0.0 255.255.255.0 
+Default-router 10.0.0.100
+Dns-server 4.4.4.4
+Domain-name Review.com
+
+
+
+! Stateless SLAAC
+ipv6 nd other-config-flag
+
+! Stateful SLAAC
+interface g0/0
+ipv6 nd managed-config-flag
+ipv6 nd prefix default-noautoconfig  
+
+! static routing
+ip route 10.0.4.0 255.255.255.0 10.0.3.2
+
+! IPV6 routes
+ipv6 route 2001:DB8::0/32 2001:DB8:0:ee44::1
+
+
+! Port Security 
+inte fa0/1 
+switchport mode access
+switchport port-security 
+switchport port-security mac-address sticky
+switchport port-security maximum 2
+switchport port-security violation shutdown
+exit
+! Other options include restrict 
+
+! DHCP Snooping
+ip dhcp Snooping
+inte fa0/1
+ip dhcp snooping trust
+ip dhcp snooping limit rate 5
+
+! set dhcp snooping for vlans
+ip dhcp snooping vlan 1,2,3,4
+
+! BPDU gaurd
+inte fa0/1 
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+! Stop Trunk negotiations
+switchport nonegotiate
+
+
+
+
+
+
+
+
+
+
+
+! R2 ---------------------------------------
+en
+configure terminal 
+hostname R1
+
+! Basic Config
+no ip domain-lookup 
+enable secret class
+line con 0
+password cisco
+login 
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption 
+banner motd #This is R2. Unauthorized access is not allowed#
+exit
+
+clock set 10:00:00
+
+configure terminal
+ip domain-name cisco.com
+crypto key generate rsa
+1024
+
+ip ssh version 2
+username  Admin password Cisco12345
+
+! Router Subinterfaces
+! Task 2
+interface g0/1
+ip address 10.0.3.2 255.255.255.252
+no shutdown
+
+! task 4
+interface g0/0
+ip address 10.0.4.100 255.255.255.0
+ipv6 address 2001:3:3:3::2/64
+no shutdown
+
+interface loopback 9
+ip address 9.0.0.100 255.255.255.0
+ipv6 address 2001:9:9:9::100/64 
+
+
+! Task 6
+! Interfacing leading to LAN 2
+interface g0/0
+! give ip of DHCP server
+Ip helper-address 10.0.3.2
+
+
+
+
+
+
+
+
+
+
+
+! S1 -----------------------------------------
+en
+configure terminal 
+hostname S1
+
+
+no ip domain-lookup 
+enable secret class
+line con 0
+password cisco
+login 
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption 
+banner motd #This is S1. Unauthorized access is not allowed#
+exit
+
+clock set 10:00:00
+
+configure terminal
+ip domain-name cisco.com
+crypto key generate rsa
+1024
+
+ip ssh version 2
+username  Admin password Cisco12345
+
+! Task 3
+vlan 15
+name Sales
+
+vlan 30
+name Finance
+
+vlan 25
+name Native
+
+vlan 45
+name Management
+
+default gateway 10.0.0.100 255.255.255.0
+
+interface vlan 45
+ip address 10.0.2.101 255.255.255.0
+
+interface g1/0/3
+switchport mode access
+switchport access vlan 15
+
+interface g1/0/4
+switchport mode access
+switchport access vlan 30
+
+! Trunk to Router
+interface g1/0/1
+switchport mode trunk 
+switchport trunk allowed vlan 15,30,25,45
+switchport trunk Native vlan 25
+
+
+! Task 5
+! Etherchannel
+interface range g1/0/2,g1/0/5,g1/0/7
+switchport mode trunk 
+switchport trunk allowed vlan 15,30,25,45
+switchport trunk Native vlan 25
+! For PAgP
+! Channel-group 1 mode desirable
+! For Lacp          
+Channel-group 1 mode active
+
+
+
+
+
+
+
+
+
+
+
+
+! S2 --------------------------------------
+en
+configure terminal 
+hostname R1
+
+
+no ip domain-lookup 
+enable secret class
+line con 0
+password cisco
+login 
+
+line vty 0 15
+password cisco
+login
+
+service password-encryption 
+banner motd #This is R1. Unauthorized access is not allowed#
+exit
+
+clock set 10:00:00
+
+configure terminal
+ip domain-name cisco.com
+crypto key generate rsa
+1024
+
+ip ssh version 2
+username  Admin password Cisco12345
+
+! Task 3
+vlan 15
+name Sales
+vlan 30
+name Finance
+vlan 25 
+name Native
+vlan 45 
+name Management
+
+default gateway 10.0.0.100 255.255.255.0
+
+interface vlan 45
+ip address 10.0.2.102 255.255.255.0
+
+interface g1/0/3
+switchport mode access
+switchport access vlan 15
+
+interface g1/0/4
+switchport mode access
+switchport access vlan 30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+! S3
+

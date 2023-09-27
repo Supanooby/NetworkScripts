@@ -1,0 +1,216 @@
+R1
+--------------------------------
+en
+conf t
+hostname R1
+
+no ip domain-lookup
+
+enable secret class
+
+line con 0 
+password cisco
+login
+
+line vty 0 15
+password cisco
+login
+
+exit
+
+service password-encryption 
+
+banner motd #This is R1. Unauthorized access is prohibited.#
+
+// Maybe 
+do wr
+
+
+Switch1
+----------
+
+en
+conf t
+hostname SW1
+
+no ip domain-lookup
+
+enable secret class
+
+line con 0
+password cisco
+login
+
+line vty 0 15
+password cisco
+login
+
+exit
+
+service password-encryption 
+
+banner motd #This is SW1. Unauthorized access is prohibited#
+
+exit
+
+clock set [hh:mm:ss] [month] [day] [year]
+
+// Not for this lab
+wr
+
+
+SW2
+-----
+
+en
+conf t
+hostname SW2
+
+no ip domain-lookup
+
+enable secret class
+
+line con 0
+password cisco
+login
+
+line vty 0 15
+password cisco
+login
+
+exit
+
+service password-encryption 
+
+banner motd #This is SW2. Unauthorized access is prohibited#
+
+exit
+
+clock set [hh:mm:ss] [month] [day] [year]
+
+// Not for this lab
+wr
+
+Part 2
+--------------
+
+SW1
+--------------
+en
+conf t
+
+vlan 3 
+name Management
+
+inte vlan 3 
+ip address 192.168.3.11 255.255.255.0
+exit
+ip default-gateway 192.168.3.1
+
+inte G 1/0/3
+switchport mode access
+switchport access vlan 3
+switchport nonegotiate
+
+
+vlan 7
+name ParkingLot
+
+inte range g1/0/4 - 28
+switchport mode access
+switchport nonegogiate
+switchport access vlan 7
+shut
+
+// Part 3 SW1 set trunk
+
+inte G1/0/1 
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 8
+
+switchport trunk allowed vlan 3,4,8
+
+// configure trunk fa 0/
+inte G1/0/2 
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 8
+switchport trunk allowed vlan 3,4,8
+
+
+
+
+SW2
+----------------------
+en
+conf t
+
+vlan 4
+name Operations
+
+inte G1/0/2
+switchport mode access
+switchport access vlan 4
+switchport nonegotiate
+
+
+vlan 3
+name Management
+
+inte vlan 3
+ip address 192.168.3.12 255.255.255.0
+exit
+ip default-gateway 192.168.3.1
+
+
+vlan 7
+name ParkingLot
+
+inte range G1/0/3 - 28
+switchport mode access
+switchport nonegogiate
+switchport access vlan 7
+shut
+
+// Part 3 SW2 set trunk
+inte G1/0/1 
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 8
+
+switchport trunk allowed vlan 3,4,8
+
+
+
+
+
+part 4
+-------
+R1
+-----
+
+en
+conf t
+
+inte g0/0
+
+// router subinterface for vlan 3
+
+inte g0/0.3
+encapsulation dot1q 3
+ip address 192.168.3.1 255.255.255.0
+no shut
+
+// router subinterface for vlan 4
+inte g0/0.4 
+encapsulation dot1q 4
+ip address 192.168.4.1 255.255.255.0
+
+// router subinterface for vlan 8
+inte g0/0.8
+encapsulation dot1q 8 native
+
+
+
+

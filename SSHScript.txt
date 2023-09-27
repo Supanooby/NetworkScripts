@@ -1,0 +1,38 @@
+En 
+
+Conf t 
+
+Hostname Sw0 
+
+Inte vlan 1 
+
+Ip address 192.168.0.3 255.255.255.0 
+
+No shut 
+
+Enable password ciscoen 
+
+Show ip ssh 
+
+Ip domain-name cisco.com 
+
+Crypto key generate rsa 
+
+1024 
+
+Ip ssh version 2 
+
+Username admin password ciscossh 
+
+Line vty 0 15  
+
+No transport input 
+
+Login local							
+ 
+
+Transport input ssh 						
+
+exit 
+
+Ip default-gateway 192.168.1.2 

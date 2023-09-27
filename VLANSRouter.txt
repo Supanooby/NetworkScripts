@@ -1,0 +1,57 @@
+# Configure routing for inter vlan routing 
+
+En  
+
+Conf t 
+
+Inte g 0/0  
+
+No shut 
+
+ 
+
+# sub interface for vlan 2 
+
+Inte g0/0.2				 
+
+Encapsulation dot1q 2 
+
+Ip address 10.0.0.100 255.255.255.0 
+
+ 
+
+# sub interface for vlan 3 
+
+Inte g0/0.2				 
+
+Encapsulation dot1q 3 
+
+Ip address 192.168.1.100 255.255.255.0 
+
+ 
+
+ 
+
+# sub interface for vlan 4 
+
+Inte g0/0.2				 
+
+Encapsulation dot1q 4 
+
+Ip address 192.168.2.100 255.255.255.0 
+
+ 
+
+ 
+
+# sub interface for vlan 15 native trunking 
+
+Inte g0/0.2				 
+
+Encapsulation dot1q 15 native 
+
+ 
+
+Show ip route brief 
+
+ 

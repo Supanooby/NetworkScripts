@@ -1,0 +1,24 @@
+# Script for Trunking 
+
+
+en 
+
+Conf t 
+
+Inte fa 0/7 
+
+Swithcprot mode trunk					 
+
+Switchport trunk allowed vlan 2, 3, 10, 15 
+
+Switchport trunk native vlan 15                                             
+
+ 
+
+Show inte trunk 
+
+ 
+ 
+
+
+ 

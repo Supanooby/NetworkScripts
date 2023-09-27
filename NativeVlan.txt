@@ -1,0 +1,4 @@
+Script for Native Vlan
+
+Switchport trunk native vlan 15                                             
+

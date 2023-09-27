@@ -1,0 +1,26 @@
+en
+
+conf t
+
+hostname [hostname]
+
+enable secret [secret]
+
+service password-encryption
+
+
+banner motd "MOTD"
+
+line con 0
+
+password Cisco
+
+login
+
+line vty 0 15
+password Cisco
+
+inte g0/0 
+ip addresss 192.168.1.1 255.255.255.0 
+no shut
+

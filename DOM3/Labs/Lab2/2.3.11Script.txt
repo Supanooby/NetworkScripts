@@ -5,7 +5,7 @@ conf t
 
 hostname RA
 
-inte g0/0
+inte g0/0/0
 ip address 192.168.1.1 255.255.255.0
 no shut
 
@@ -14,10 +14,14 @@ ip address 192.168.31.11 255.255.255.0
 
 router ospf 10
 
-inte g0/0
+inte g0/0/0
 ip ospf 10 area 0
 inte lo0
 ip ospf 10 area 0
+
+
+inte g0/0
+ip ospf priority 200
 
 ----------------------
 RB
@@ -27,7 +31,7 @@ conf t
 
 hostname RB
 
-inte g0/0
+inte g0/0/0
 ip address 192.168.1.2 255.255.255.0
 no shut
 
@@ -36,10 +40,13 @@ ip address 192.168.31.22 255.255.255.0
 
 router ospf 10
 
-inte g0/0
+inte g0/0/0
 ip ospf 10 area 0
 inte lo0
 ip ospf 10 area 0
+
+inte g0/0
+ip ospf priority 200
 
 
 -----------------
@@ -63,3 +70,7 @@ inte g0/0
 ip ospf 10 area 0
 inte lo0
 ip ospf 10 area 0
+
+
+inte g0/0
+ip ospf priority 200

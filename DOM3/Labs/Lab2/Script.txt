@@ -7,7 +7,7 @@ no ip domain-lookup
 
 enable secret class
 line con 0
-password cisco 
+password cisco
 login
 line vty 0 15 
 password cisco
@@ -20,7 +20,7 @@ do wr
 
 
 
-inte G0/0/1 
+inte G0/1 
 ip address 10.53.0.1 255.255.255.0
 no shut
 
@@ -34,12 +34,12 @@ network 10.53.0.0 0.0.0.255 area 0
 
 
 !OSPF PRIORITY
-inte g0/0/1	
+inte g0/1	
 ip ospf priority 50
 
 
 !Hello timers
-inte g0/0/1
+inte g0/1
 ip ospf hello-interval 30
 exit
 
@@ -62,7 +62,7 @@ yes
 
 
 !Verify 
-show ip ospf interface g0/0/1 
+show ip ospf interface g0/1 
 show ip route ospf 
 show ip route ospf command. 
 
@@ -102,8 +102,8 @@ do wr
 
 
 
-inte g0/0/1 
-ip address 10.53.0.1 255.255.255.0
+inte g0/1 
+ip address 10.53.0.2 255.255.255.0
 no shut
 
 inte Loopback1 
@@ -119,7 +119,7 @@ network 192.168.1.0 0.0.0.255 area 0
 
 
 !Hello Timers
-inte g0/0/1
+inte g0/1
 ip ospf hello-interval 30
 
 !Make interface Point-to-Point network
@@ -137,6 +137,7 @@ do show ip protocools
 router ospf 56
 auto-cost reference-bandwidth 1000
 exit
+exit
 
 
 !Restart OSPF
@@ -153,7 +154,10 @@ S1
 en
 conf t
 hostname S1
-no ip domain-lookup
+
+
+no ip domain-ookup
+
 
 enable secret class
 line con 0
@@ -184,7 +188,7 @@ S2
 en
 conf t
 hostname S2
-no ip domain-lookup
+no ip domain lookup
 
 enable secret class
 line con 0

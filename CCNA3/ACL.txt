@@ -1,4 +1,26 @@
-! Standard ACL
+! --------- Standard ACL --------------------
 ! Create ACL named standard and allow source destination of 192.168.1.0 / 24 network 
 access-list NAME standard permit 192.168.1.0 255.255.255.0
 
+! Using Number]
+access-list 99 permit 192.168.1.0 0.0.0.255
+
+
+interface g0/1
+ip access-group standard in 
+
+
+
+
+! ---------- Extended ACL ------------
+! Using Name
+access-list NAME extended permit 192.168.1.0 
+
+
+! Using Number: permit PORT Source Wildcard [protocol] destination wildcard protocl
+access list 101 permit tcp 10.0.0.1 0.0.0.0 192.168.0.1 0.0.0.0 eq 80
+
+
+~ Apply to router interface
+interface g0/1
+ip access-group 100 in 

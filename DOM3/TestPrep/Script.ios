@@ -1,0 +1,73 @@
+sn: 100769374
+
+! ------------- R1 -------------------
+Enable 
+Config terminal 
+Hostname R1 
+Ip domain name lab.com 
+No ip domain lookup 
+Service password-encryption 
+Username admin password cisco 
+Crypto key generate rsa modulus 1024 
+Enable secret class 
+
+Line console 0 
+Password cisco 
+Login 
+
+Line vty 0 4 
+Transport input ssh 
+Login local 
+
+Banner motd $ Authorized Users Only! $ 
+
+Interface g0/0/0 
+Ip address 10.74.254.2 255.255.255.252 
+No shutdown 
+
+Interface g0/0/1  
+Ip address 192.168.74.1 255.255.255.0 
+No shutdown 
+
+Interface loopback 0 
+Ip address 209.166.74.1 255.255.255.0 
+
+! ------------- R2 -------------------
+Enable 
+Config terminal 
+Hostname R2 
+Ip domain name lab.com 
+No ip domain lookup 
+Service password-encryption 
+Username admin password cisco 
+Crypto key generate rsa modulus 1024 
+Enable secret class 
+
+Line console 0 
+Password cisco 
+Login 
+
+Line vty 0 4 
+Transport input ssh 
+Login local 
+
+Banner motd $ Authorized Users Only! $ 
+
+Interface g0/0/0 
+Ip address 10.74.254.1 255.255.255.252 
+No shutdown 
+
+Interface g0/0/1  
+Ip address 10.74.1.1 255.255.255.0 
+No shutdown 
+
+Interface loopback 0 
+Ip address 209.165.74.1 255.255.255.0 
+
+
+
+
+
+
+
+

@@ -45,8 +45,36 @@ inte lo1
 ip address 172.16.1.1 255.255.255.0
 
 
+! Devlop extended ACL
+access-list 101 remark ACL 101 fufils policies 1,2,3
+! Deny ssh sales to management SSH
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 22
+! Deny sales to management HTTP
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 80
+! Deny sales to R1 interface HTTP
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.30.0.1 0.0.0.0 eq 80
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.40.0.1 0.0.0.0 eq 80
+!! Deny sales to management HTTPS
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 443 
+! Deny sales to r1 interfaces HTTPS
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.30.0.1 0.0.0.0 eq 443
+access-list 101 deny tcp 10.40.0.0 0.0.0.255 10.40.0.1 0.0.0.0 eq 443
+! Deny operations ping to sales or management
+access-list 101 deny icmp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 echo
+access-list 101 deny icmp 10.40.0.0 0.0.0.255 10.30.0.0 0.0.0.255 echo
+access-list 101 permit ip any any
 
+inte g0/0/1.40
+ip access-group 101 in
 
+! ACL for Policy 4
+access-list 102 remark ACL FOR POLICY 4
+! Deny ping from Operations to Sales
+access-list 102 deny icmp 10.30.0.0 0.0.0.255 10.40.0.0 0.0.0.255 echo
+access-list 102 permit ip any any
+
+inte g0/0/1.30
+ip access-group 102 in 
 
 
 
@@ -204,6 +232,10 @@ end
 
 !assign interface to corect vlan
 inte f0/18
+switchport mode access
+switchport access vlan 40
+
+inte fa0/5
 switchport mode access
 switchport access vlan 20
 

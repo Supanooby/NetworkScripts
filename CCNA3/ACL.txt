@@ -14,7 +14,7 @@ ip access-group standard in
 
 ! ---------- Extended ACL ------------
 ! Using Name
-access-list NAME extended permit 192.168.1.0 
+access-list NAME extended permit tcp 10.0.0.1 0.0.0.0 192.168.0.1 0.0.0.0 eq 80
 
 
 ! Using Number: permit PORT Source Wildcard [protocol] destination wildcard protocl

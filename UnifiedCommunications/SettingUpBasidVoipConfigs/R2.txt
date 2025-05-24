@@ -1,0 +1,41 @@
+enable
+configure terminal
+hostname R2
+
+enable secret cisco
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 4
+password cisco
+login
+exit
+
+interface FastEthernet0/1
+no shutdown
+exit
+
+interface FastEthernet0/1.10
+encapsulation dot1q 10
+ip address 172.16.10.10 255.255.255.0
+exit
+
+interface FastEthernet0/1.50
+encapsulation dot1q 50
+ip address 172.16.50.10 255.255.255.0
+exit
+
+interface FastEthernet0/1.99
+encapsulation dot1q 99
+ip address 172.16.99.10 255.255.255.0
+exit
+
+end
+write memory
+
+
+! Verifications 
+show running-config

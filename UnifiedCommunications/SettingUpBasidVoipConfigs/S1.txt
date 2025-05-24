@@ -1,0 +1,56 @@
+enable
+configure terminal
+hostname S1
+
+enable secret cisco
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 4
+password cisco
+login
+exit
+
+vlan 10
+name VOICE
+exit
+
+vlan 50
+name DATA
+exit
+
+vlan 99
+name MANAGEMENT
+exit
+
+interface FastEthernet0/1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+no shutdown
+exit
+
+interface range FastEthernet0/3 - 24
+switchport mode access
+switchport access vlan 50
+switchport voice vlan 10
+exit
+
+interface Vlan99
+ip address 172.16.99.1 255.255.255.0
+no shutdown
+exit
+
+ip default-gateway 172.16.99.10
+
+end
+write memory
+
+
+! Verifications
+
+show vlan brief
+show interfaces trunk
+show running-config

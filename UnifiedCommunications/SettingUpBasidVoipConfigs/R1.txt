@@ -1,0 +1,48 @@
+enable
+configure terminal
+hostname R1
+
+enable secret cisco
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 4
+password cisco
+login
+exit
+
+interface FastEthernet0/1
+ip address 172.16.50.1 255.255.255.0
+no shutdown
+exit
+
+ip dhcp excluded-address 172.16.10.1 172.16.10.10
+ip dhcp excluded-address 172.16.50.1 172.16.50.10
+
+ip dhcp pool VOICE
+network 172.16.10.0 255.255.255.0
+default-router 172.16.10.10
+option 150 ip 172.16.10.10
+exit
+
+ip dhcp pool DATA
+network 172.16.50.0 255.255.255.0
+default-router 172.16.50.10
+option 150 ip 172.16.10.10
+exit
+
+end
+write memory
+
+
+
+! Verification
+
+show ip dhcp binding
+show running-config
+
+
+

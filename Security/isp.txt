@@ -1,0 +1,21 @@
+en
+conf t
+hostname ISP
+
+! Exclude range of ip addresses from DHCP pool
+ip dhcp excluded-add 11.xx.11.1 11.xx.11.5
+
+! Create DHCP Pool 
+ip dhcp pool CUST100
+network 11.xx.11.0 255.255.255.0
+default-router 11.xx.11.1
+dns-server 11.xx.11.1
+
+# Configure interface g0/0/0
+int g0/0/0
+ip add 11.xx.11.1 255.255.255.0
+no shut
+exit
+
+! Configure default route
+ip route 0.0.0.0 0.0.0.0 g0/0/0

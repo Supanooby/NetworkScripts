@@ -1,0 +1,19 @@
+Basic Config 
+==================
+enable
+configure terminal
+hostname <device name>
+
+enable secret cisco
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 4
+password cisco
+login
+exit
+
+

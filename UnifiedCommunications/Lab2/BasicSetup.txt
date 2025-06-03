@@ -1,0 +1,121 @@
+Router1 (DHCP router):
+
+========================
+
+ip dhcp excluded-address 172.16.10.1 172.16.10.10
+
+ip dhcp excluded-address 172.16.50.1 172.16.50.10
+
+! Give the DHCP server an ip address
+
+interface FastEthernet0/1
+ip address 172.16.50.1 255.255.255.0
+no shutdown
+exit
+
+
+!
+
+ip dhcp pool VLAN10
+
+network 172.16.10.0 255.255.255.0
+
+default-router 172.16.10.10
+
+option 150 ip 172.16.10.10
+
+ip dhcp pool VLAN50
+
+network 172.16.50.0 255.255.255.0
+
+option 150 ip 172.16.10.10
+
+default-router 172.16.50.10
+
+!
+
+ip route 172.16.10.0 255.255.255.0 G0/0/1
+
+ip route 0.0.0.0 0.0.0.0 G0/0/1
+
+
+
+Router3: Call Manager
+
+=======================
+
+interface G0/1.10
+
+encapsulation dot1Q 10
+
+ip address 172.16.10.10 255.255.255.0
+
+ip helper-address 172.16.50.1
+
+!
+
+interface G0/1.50
+
+encapsulation dot1Q 50
+
+ip address 172.16.50.10 255.255.255.0
+
+ip helper-address 172.16.50.1
+
+!
+
+interface G0/1.99
+
+encapsulation dot1Q 99
+
+ip address 172.16.99.10 255.255.255.0
+
+!
+
+Interface G0/1
+
+no shutdown
+
+
+
+PoE Switch
+
+==============
+
+interface G1/0/1
+
+switchport mode trunk
+
+no shutdown
+
+!
+
+interface G1/0/2
+
+switchport access vlan 50
+
+switchport mode access
+
+no shutdown
+
+!
+
+interface range G1/0/3-24
+
+switchport access vlan 50
+
+switchport mode access
+
+switchport voice vlan 10
+
+no shutdown
+
+
+
+interface Vlan99
+
+ip address 172.16.99.1 255.255.255.0
+
+!
+
+ip default-gateway 172.16.99.10

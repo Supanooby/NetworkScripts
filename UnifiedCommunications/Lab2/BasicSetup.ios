@@ -121,3 +121,60 @@ ip address 172.16.99.1 255.255.255.0
 !
 
 ip default-gateway 172.16.99.10
+
+
+
+
+=========================================
+! Setup Telephony
+! R3 (CME Router)
+
+telephony-service   ! Enable Telephony
+no auto-reg-ephone  ! Disable automation registration of physical phones
+max-ephones 10      ! Set max # of physical phones
+max-dn 12           ! Set max number of directory numbers supported by CUCME router
+! Set ip address for CUCME to receive and respond to ip phones. Any valid Ip address on router can be used, will use VOICE VLan interface in this case
+ip source-address 172.16.10.10 port 2000    
+! Create default template files for phones
+create cnf-files
+
+! Configure ephones (physical phoenes) with ephone-dn (virutal numbers)
+! Create ephone directory number 
+ephone-dn 1
+number 1001
+
+ephone-dn 2
+number 1002
+
+! configure ephoens
+ephone 1
+mac-address AAAA.AAAA.AAAA
+type 7960
+button 1:1  ! Map physical button 1, to ephone-dn 1
+
+ephone 2
+mac-address BBBB.BBBB.BBBB
+type 7960
+button 1:2   ! Map physical button 1, to ephone-dn 2
+
+
+
+! =======================
+! to place calls between phones, just dial the ephone-dn on the phones
+
+
+! ===========================
+! Verfication commands 
+
+! All devices
+show running-configure
+
+! CME Router
+show ephone-dn
+show telephony-service
+show ephone 
+show call active voice
+
+! DHCP Server
+show dhcp binding
+

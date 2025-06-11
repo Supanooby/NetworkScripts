@@ -36,7 +36,7 @@ default-router 172.16.50.10
 
 !
 
-ip route 172.16.10.0 255.255.255.0 G0/0/1
+ip route 172.16.10.0 255.255.255.0 G0/0/0
 
 ip route 0.0.0.0 0.0.0.0 G0/0/0
 
@@ -88,6 +88,9 @@ PoE Switch
 ==============
 
 interface G1/0/2
+
+! This may or may not be neccessary, this will tell that type of encapsulation the switchport will trunk with
+switchport trunk encapsulation dot1q
 
 switchport mode trunk
 
@@ -164,6 +167,7 @@ button 1:2   ! Map physical button 1, to ephone-dn 2
 
 ! =======================
 ! to place calls between phones, just dial the ephone-dn on the phones
+! Example: dial 1002 from ephone-1 (which has 1001 dn) to call ephone-2 (which has 1002 dn)
 
 
 ! ===========================
@@ -181,3 +185,13 @@ show call active voice
 ! DHCP Server
 show dhcp binding
 
+
+! ========================================
+! Extra notes and troubleshooting
+! ========================================
+
+! IF doing on packet tracer, for PoE use Switch c3650 or c3660, Router: 2811  
+
+! If switchport trunk interface cannot be set because it is auto, manually set the encapuslation type to dot1q
+switchport trunk encapsulation dot1q
+ 

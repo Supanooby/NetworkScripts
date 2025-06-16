@@ -1,0 +1,248 @@
+Pod 10
+
+Router1 (DHCP router):
+
+========================
+
+ip dhcp excluded-address 172.16.10.1 172.16.10.10
+
+ip dhcp excluded-address 172.16.50.1 172.16.50.10
+
+! Give the DHCP server an ip address
+
+interface G0/0
+ip address 172.16.50.1 255.255.255.0
+no shutdown
+exit
+
+
+!
+
+ip dhcp pool VLAN10
+
+network 172.16.10.0 255.255.255.0
+
+default-router 172.16.10.10
+
+option 150 ip 172.16.10.10
+
+ip dhcp pool VLAN50
+
+network 172.16.50.0 255.255.255.0
+
+option 150 ip 172.16.10.10
+
+default-router 172.16.50.10
+
+!
+
+ip route 172.16.10.0 255.255.255.0 G0/0
+
+ip route 0.0.0.0 0.0.0.0 G0/0
+
+
+
+Router3: Call Manager
+=======================
+! use 2811 in packet tracer for VOIP featuers
+
+
+
+
+interface g0/0.10
+
+encapsulation dot1Q 10
+
+ip address 172.16.10.10 255.255.255.0
+
+ip helper-address 172.16.50.1
+
+!
+
+interface g0/0.50
+
+encapsulation dot1Q 50
+
+ip address 172.16.50.10 255.255.255.0
+
+ip helper-address 172.16.50.1
+
+!
+
+interface g0/0.99
+
+encapsulation dot1Q 99
+
+ip address 172.16.99.10 255.255.255.0
+
+!
+
+Interface g0/0
+
+no shutdown
+
+
+
+PoE Switch
+
+==============
+
+interface G1/0/2
+
+! This may or may not be neccessary, this will tell that type of encapsulation the switchport will trunk with
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+no shutdown
+
+!
+
+interface G1/0/1
+
+switchport access vlan 50
+
+switchport mode access
+
+no shutdown
+
+!
+
+interface range G1/0/3-24
+
+switchport access vlan 50
+
+switchport mode access
+
+switchport voice vlan 10
+
+no shutdown
+
+
+
+interface Vlan99
+
+ip address 172.16.99.1 255.255.255.0
+
+!
+
+ip default-gateway 172.16.99.10
+
+
+
+
+=========================================
+! Setup Telephony
+! R3 (CME Router)
+
+telephony-service   ! Enable Telephony
+no auto-reg-ephone  ! Disable automation registration of physical phones
+max-ephones 10      ! Set max # of physical phones
+max-dn 12           ! Set max number of directory numbers supported by CUCME router
+! Set ip address for CUCME to receive and respond to ip phones. Any valid Ip address on router can be used, will use VOICE VLan interface in this case
+ip source-address 172.16.10.10 port 2000    
+! Create default template files for phones
+create cnf-files
+
+! Configure ephones (physical phoenes) with ephone-dn (virutal numbers)
+! Create ephone directory number 
+ephone-dn 1
+number 1001
+
+ephone-dn 2
+number 1002
+
+! configure ephoens
+ephone 1
+mac-address AAAA.AAAA.AAAA
+type 7960
+button 1:1  ! Map physical button 1, to ephone-dn 1
+
+ephone 2
+mac-address BBBB.BBBB.BBBB
+type 7960
+button 1:2   ! Map physical button 1, to ephone-dn 2
+
+
+
+
+
+
+!  ==========================================================
+!  lab 3 
+
+
+! Setup R1 
+int G0/0
+ip address 172.16.100.1 255.255.255.0
+
+!Setup S2
+
+
+
+
+
+! Setup Telephony
+! R1 (CME Router)
+
+telephony-service   ! Enable Telephony
+no auto-reg-ephone  ! Disable automation registration of physical phones
+max-ephones 10      ! Set max # of physical phones
+max-dn 12           ! Set max number of directory numbers supported by CUCME router
+! Set ip address for CUCME to receive and respond to ip phones. Any valid Ip address on router can be used, will use VOICE VLan interface in this case
+ip source-address 172.16.10.10 port 2000    
+! Create default template files for phones
+create cnf-files
+
+! Configure ephones (physical phoenes) with ephone-dn (virutal numbers)
+! Create ephone directory number 
+ephone-dn 1
+number 1001
+
+ephone-dn 2
+number 1002
+
+! configure ephoens
+ephone 1
+mac-address AAAA.AAAA.AAAA
+type 7960
+button 1:1  ! Map physical button 1, to ephone-dn 1
+
+ephone 2
+mac-address BBBB.BBBB.BBBB
+type 7960
+button 1:2   ! Map physical button 1, to ephone-dn 2
+
+
+
+
+! =======================
+! to place calls between phones, just dial the ephone-dn on the phones
+! Example: dial 1002 from ephone-1 (which has 1001 dn) to call ephone-2 (which has 1002 dn)
+
+
+! ===========================
+! Verfication commands 
+
+! All devices
+show running-configure
+
+! CME Router
+show ephone-dn
+show telephony-service
+show ephone 
+show call active voice
+
+! DHCP Server
+show dhcp binding
+
+
+! ========================================
+! Extra notes and troubleshooting
+! ========================================
+
+! IF doing on packet tracer, for PoE use Switch c3650 or c3660, Router: 2811  
+
+! If switchport trunk interface cannot be set because it is auto, manually set the encapuslation type to dot1q
+switchport trunk encapsulation dot1q
+ 

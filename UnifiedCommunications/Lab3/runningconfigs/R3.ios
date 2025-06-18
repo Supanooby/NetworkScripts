@@ -1,0 +1,209 @@
+Current configuration : 2702 bytes
+!
+! Last configuration change at 00:50:16 UTC Tue Jun 17 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1_TS
+!
+boot-start-marker
+boot-end-marker
+!
+!
+! card type command needed for slot/vwic-slot 0/1
+!
+no aaa new-model
+memory-size iomem 10
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip dhcp excluded-address 172.16.10.1 172.16.10.10
+ip dhcp excluded-address 172.16.50.1 172.16.50.10
+!
+ip dhcp pool VLAN10
+ network 172.16.10.0 255.255.255.0
+ default-router 172.16.10.10
+ option 150 ip 172.16.10.10
+!
+ip dhcp pool VLAN50
+ network 172.16.50.0 255.255.255.0
+ option 150 ip 172.16.10.10
+ default-router 172.16.50.10
+!
+ip dhcp pool VLAN100
+ network 172.16.100.0 255.255.255.0
+ default-router 172.16.100.1
+ option 150 ip 172.16.100.1
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CISCO2901/K9 sn FJC2121A0W2
+license boot module c2900 technology-package securityk9
+hw-module pvdm 0/0
+!
+hw-module pvdm 0/1
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 172.16.50.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 172.16.100.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0
+ip route 172.16.10.0 255.255.255.0 GigabitEthernet0/0
+!
+!
+!
+!
+control-plane
+!
+!
+voice-port 0/2/0
+!
+voice-port 0/2/1
+!
+voice-port 0/3/0
+!
+voice-port 0/3/1
+ !
+ !
+ !
+ !
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+!
+dial-peer voice 1 voip
+ destination-pattern 1...
+ session target ipv4:172.16.10.10:2000
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+telephony-service
+ no auto-reg-ephone
+ max-ephones 10
+ max-dn 12
+ ip source-address 172.16.100.1 port 2000
+ max-conferences 8 gain -6
+ transfer-system full-consult
+ create cnf-files version-stamp Jan 01 2002 00:00:00
+!
+!
+ephone-dn  1
+ number 2001
+!
+!
+ephone-dn  2
+ number 2002
+!
+!
+ephone  1
+ device-security-mode none
+ mac-address 5478.1AE1.BAA1
+ type 7945
+ button  1:1
+!
+!
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ login
+ transport input none
+!
+scheduler allocate 20000 1000
+!
+end
